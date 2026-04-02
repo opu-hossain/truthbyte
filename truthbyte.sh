@@ -7,7 +7,7 @@
 # hashes against expected values. It supports multiple hash algorithms
 # and can process both individual files and directories.
 #
-# Author: User
+# Author: Salman
 # Version: 2.0-1
 # =========================================================================
 
