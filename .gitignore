@@ -1,28 +1,65 @@
-# Ignore all .deb files
-*.deb
+# Binary executables
+truthbyte
+src/truthbyte
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# Ignore test files and directories
-test/
-tests/
-*_test.*
-*.test.*
-test_*.*
+# Object files
+*.o
+*.obj
+*.a
+*.lib
+
+# Test files
+test.txt
 *.test
-test-results/
-test_output/
-
-# Ignore temporary test files
 *.tmp
-*.temp
-temp/
-tmp/
 
-# Ignore hash files that might be created during testing
-*.md5
-*.sha1
-*.sha256
-*.sha512
+# Build directories
+build/
+bin/
+dist/
+*.build/
 
-# Ignore verification output files
-verification_*.txt
-*_verification.txt
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.orig
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.bak
+
+# Debian package files (from your old structure)
+*.deb
+*.gz
+truthbyte_2.0-1/
+DEBIAN/
+usr/
+
+# Installer scripts (now replaced by compiled binary)
+install.sh
+truthbyte.sh
+
+# man page build artifacts
+*.gz
+man/truthbyte.1.gz
+
+# Logs
+*.log
+
+# Backup files
+*.backup
+*.old
