@@ -1,5 +1,4 @@
 #include "commands.h"
-#include "hash.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <string.h>
