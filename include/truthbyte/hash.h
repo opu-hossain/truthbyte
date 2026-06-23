@@ -23,6 +23,17 @@ const EVP_MD *get_evp_md(HashAlgorithm algo);
 int compute_file_hash(const char *filename, HashAlgorithm algo,
                       unsigned char *md_value, unsigned int *md_len);
 
+// Convert hex string to binary (for hash verification)
+int hex_to_bin(const char *hex_str, unsigned char *bin, unsigned int *bin_len);
+
+// Compare outputed hash with expected hash string
+int verify_file_hash(const char *filename, HashAlgorithm algo,
+                     const char *expected_hash);
+
+// Convert binary to hex string (for display);
+int bin_to_hex(const unsigned char *hash, unsigned int len, char *output,
+               size_t output_size);
+
 // Helper function to print hash
 void print_hash(const unsigned char *hash, unsigned int len,
                 HashAlgorithm algo);

@@ -1,6 +1,4 @@
 # Binary executables
-truthbyte
-src/truthbyte
 *.exe
 *.exe~
 *.dll
@@ -48,14 +46,6 @@ Thumbs.db
 truthbyte_2.0-1/
 DEBIAN/
 usr/
-
-# Installer scripts (now replaced by compiled binary)
-install.sh
-truthbyte.sh
-
-# man page build artifacts
-*.gz
-man/truthbyte.1.gz
 
 # Logs
 *.log

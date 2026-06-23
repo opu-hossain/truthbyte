@@ -1,4 +1,5 @@
-#include "hash.h"
+#include "../include/truthbyte/hash.h"
+#include <ctype.h>
 #include <openssl/evp.h>
 #include <stdio.h>
 #include <string.h>
@@ -105,4 +106,54 @@ void print_hash(const unsigned char *hash, unsigned int len,
   }
 
   printf("\n");
+}
+
+int hex_to_bin(const char *hex_str, unsigned char *bin, unsigned int *bin_len) {
+  size_t hex_len = strlen(hex_str);
+
+  if (hex_len % 2 != 0) {
+    return 1;
+  }
+
+  *bin_len = hex_len / 2;
+
+  for (size_t i = 0; i < hex_len; i++) {
+    if (!isxdigit(hex_str[i])) {
+      return 1;
+    }
+  }
+
+  for (size_t i = 0; i < *bin_len; i++) {
+    sscanf(hex_str + (2 * i), "%02hhx", &bin[i]);
+  }
+
+  return 0;
+}
+
+int verify_file_hash(const char *filename, HashAlgorithm algo,
+                     const char *expected_hash) {
+  unsigned char computed_hash[MAX_HASH_LEN];
+  unsigned int computed_len;
+
+  if (compute_file_hash(filename, algo, computed_hash, &computed_len) != 0) {
+    return -1;
+  }
+
+  unsigned char expected_bin[MAX_HASH_LEN];
+  unsigned int expected_len;
+
+  if (hex_to_bin(expected_hash, expected_bin, &expected_len) != 0) {
+    return 1;
+  }
+
+  if (computed_len != expected_len) {
+    return 1;
+  }
+
+  int result = 0;
+  for (unsigned int i = 0; i < computed_len; i++) {
+    result |= (computed_hash[i] ^ expected_bin[i]);
+  }
+
+  return (result == 0) ? 0 : 1;
 }
