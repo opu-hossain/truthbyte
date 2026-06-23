@@ -1,4 +1,4 @@
-#include "commands.h"
+#include "../include/truthbyte/commands.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <string.h>

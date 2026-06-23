@@ -1,5 +1,5 @@
-#include "commands.h"
-#include "hash.h"
+#include "../include/truthbyte/commands.h"
+#include "../include/truthbyte/hash.h"
 #include <getopt.h>
 #include <stdio.h>
 #include <string.h>
@@ -173,6 +173,9 @@ int cmd_verify(int argc, char *argv[]) {
 }
 
 int cmd_help(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+
   printf("TruthByte - File Hashing Utility\n\n");
   printf("Usage: truthbyte <command> [options] [arguments]\n\n");
   printf("Commands:\n");
@@ -184,6 +187,9 @@ int cmd_help(int argc, char *argv[]) {
 }
 
 int cmd_version(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+
   // todo
   printf("TruthByte v2.0.0\n");
   return 0;

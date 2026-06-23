@@ -1,4 +1,4 @@
-#include "hash.h"
+#include "../include/truthbyte/hash.h"
 #include <ctype.h>
 #include <openssl/evp.h>
 #include <stdio.h>
