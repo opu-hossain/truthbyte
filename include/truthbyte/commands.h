@@ -14,6 +14,7 @@ int cmd_hash(int argc, char *argv[]);
 int cmd_verify(int argc, char *argv[]);
 int cmd_help(int argc, char *argv[]);
 int cmd_version(int argc, char *argv[]);
+int cmd_scan(int argc, char *argv[]);
 
 // External command table
 extern Command commands[];

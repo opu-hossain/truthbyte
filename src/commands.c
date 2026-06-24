@@ -1,13 +1,17 @@
 #include "../include/truthbyte/commands.h"
 #include "../include/truthbyte/hash.h"
+#include <dirent.h>
 #include <getopt.h>
+#include <linux/limits.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
 Command commands[] = {{"hash", cmd_hash, "Calculate hash of a file"},
                       {"verify", cmd_verify, "Verify file hash"},
                       {"help", cmd_help, "Show this help"},
                       {"version", cmd_version, "Shows version"},
+                      {"scan", cmd_scan, "Scans a directory"},
                       {NULL, NULL, NULL}};
 
 int cmd_hash(int argc, char *argv[]) {
@@ -170,6 +174,47 @@ int cmd_verify(int argc, char *argv[]) {
     printf("Error: Unknown verification error\n");
     return 1;
   }
+}
+
+int cmd_scan(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf("Error: directory path missing\n");
+    printf("Usage: truthbyte scan <directory>\n");
+    return 1;
+  }
+
+  DIR *dir = opendir(argv[1]);
+  if (!dir) {
+    printf("Error: failed to open the directory -> %s\n", argv[1]);
+    return 1;
+  }
+
+  struct dirent *entry;
+  struct stat st;
+  char fullpath[PATH_MAX];
+
+  while ((entry = readdir(dir)) != NULL) {
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+      continue;
+    }
+
+    snprintf(fullpath, sizeof(fullpath), "%s/%s", argv[1], entry->d_name);
+
+    if (stat(fullpath, &st) == 0) {
+      if (S_ISDIR(st.st_mode)) {
+        printf("[DIR] %s\n", entry->d_name);
+      } else if (S_ISREG(st.st_mode)) {
+        printf("[FILE] %s\n", entry->d_name);
+      } else {
+        printf("[OTHER] %s\n", entry->d_name);
+      }
+    } else {
+      printf("Error: stat failed!\n");
+    }
+  }
+
+  closedir(dir);
+  return 0;
 }
 
 int cmd_help(int argc, char *argv[]) {
