@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 Command commands[] = {{"hash", cmd_hash, "Calculate hash of a file"},
                       {"verify", cmd_verify, "Verify file hash"},
@@ -177,15 +178,20 @@ int cmd_verify(int argc, char *argv[]) {
 }
 
 int cmd_scan(int argc, char *argv[]) {
-  if (argc < 2) {
-    printf("Error: directory path missing\n");
-    printf("Usage: truthbyte scan <directory>\n");
-    return 1;
+  char target_dir[PATH_MAX];
+
+  if (argc >= 2) {
+    snprintf(target_dir, sizeof(target_dir), "%s", argv[1]);
+  } else {
+    if (getcwd(target_dir, sizeof(target_dir)) == NULL) {
+      printf("Error: failed to get current directory!\n");
+      return 1;
+    }
   }
 
-  DIR *dir = opendir(argv[1]);
+  DIR *dir = opendir(target_dir);
   if (!dir) {
-    printf("Error: failed to open the directory -> %s\n", argv[1]);
+    printf("Error: failed to open the directory -> %s\n", target_dir);
     return 1;
   }
 
@@ -198,13 +204,18 @@ int cmd_scan(int argc, char *argv[]) {
       continue;
     }
 
-    snprintf(fullpath, sizeof(fullpath), "%s/%s", argv[1], entry->d_name);
+    int path_size = snprintf(fullpath, sizeof(fullpath), "%s/%s", target_dir,
+                             entry->d_name);
+    if (path_size >= (int)sizeof(fullpath)) {
+      printf("Error: Path too long, skipping %s\n", entry->d_name);
+      continue;
+    }
 
     if (stat(fullpath, &st) == 0) {
       if (S_ISDIR(st.st_mode)) {
-        printf("[DIR] %s\n", entry->d_name);
+        printf("%s\n", entry->d_name);
       } else if (S_ISREG(st.st_mode)) {
-        printf("[FILE] %s\n", entry->d_name);
+        printf("%s\n", fullpath);
       } else {
         printf("[OTHER] %s\n", entry->d_name);
       }
